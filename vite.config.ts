@@ -8,6 +8,7 @@ import tailwindcss from "tailwindcss";
 import tailwindcssNesting from "tailwindcss/nesting";
 import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 import { ViteMinifyPlugin } from "vite-plugin-minify";
+import { VitePWA } from "vite-plugin-pwa";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 
 import type { UserConfig } from "vite";
@@ -48,6 +49,34 @@ export default {
 				return html.replace(/(?=\s*<\/body>)/, `${isProduction ? "\n\t\t<script>window.coi = { quiet: true };</script>" : ""}\n\t\t<script src="${coiServiceWorkerPath}"></script>`);
 			},
 		},
+		VitePWA({
+			outDir: "build",
+			registerType: "autoUpdate",
+			manifest: false,
+			includeAssets: [
+				"./assets/favicon-64x64.png",
+				"./assets/favicon-128x128.png",
+				"./assets/favicon-192x192.png",
+				"./assets/hkilang-logo.svg",
+				"./assets/credit-logos.svg",
+			],
+			workbox: {
+				runtimeCaching: [
+					{
+						urlPattern: ({ url }) => url.origin === "https://cdn.jsdelivr.net",
+						handler: "CacheFirst",
+						options: {
+							cacheName: "jsdelivr-cache",
+							cacheableResponse: {
+								statuses: [0, 200],
+							},
+						},
+					},
+				],
+				sourcemap: !isProduction,
+				maximumFileSizeToCacheInBytes: 4194304,
+			},
+		}),
 	],
 	css: {
 		postcss: {
