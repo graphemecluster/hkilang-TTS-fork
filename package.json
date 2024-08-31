@@ -10,6 +10,7 @@
 		"worker": "rollup -c rollup.config.ts --configPlugin @rollup/plugin-typescript"
 	},
 	"dependencies": {
+		"coi-serviceworker": "^0.1.7",
 		"eastasianwidth": "^0.3.0",
 		"idb": "^8.0.0",
 		"onnxruntime-web": "^1.18.0",

@@ -14,6 +14,9 @@ import type { UserConfig } from "vite";
 
 const dsvParsers: Record<string, ((input: string) => unknown) | undefined> = { ".csv": csvParse, ".tsv": tsvParse };
 
+const isProduction = process.env["NODE_ENV"] === "production";
+const coiServiceWorkerPath = `coi-serviceworker${isProduction ? ".min" : ""}.js`;
+
 export default {
 	base: "./",
 	plugins: [
@@ -37,8 +40,18 @@ export default {
 					src: "node_modules/onnxruntime-web/dist/*.wasm",
 					dest: ".",
 				},
+				{
+					src: `node_modules/coi-serviceworker/${coiServiceWorkerPath}`,
+					dest: ".",
+				},
 			],
 		}),
+		{
+			name: "inject-coi-serviceworker",
+			transformIndexHtml(html) {
+				return html.replace(/(?=\s*<\/body>)/, `${isProduction ? "\n\t\t<script>window.coi = { quiet: true };</script>" : ""}\n\t\t<script src="${coiServiceWorkerPath}"></script>`);
+			},
+		},
 	],
 	css: {
 		postcss: {

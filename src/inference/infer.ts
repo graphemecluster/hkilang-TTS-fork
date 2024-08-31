@@ -1,4 +1,4 @@
-import { InferenceSession, Tensor } from "onnxruntime-web";
+import { InferenceSession, Tensor, env } from "onnxruntime-web";
 import seedrandom from "seedrandom";
 import { setRandom, sampleNormal } from "vega-statistics";
 
@@ -9,6 +9,8 @@ import { fromLength } from "../utils";
 
 import type { Language, ModelComponent, Voice } from "../types";
 import type { TypedTensor } from "onnxruntime-web";
+
+env.wasm.numThreads = 4;
 
 export const ALL_MODEL_COMPONENTS: readonly ModelComponent[] = ["enc", "emb", "sdp", "flow", "dec"];
 
