@@ -1,7 +1,7 @@
 {
 	"name": "hkilang-tts",
 	"version": "0.0.0",
-	"description": "香港本土語言文字轉語音朗讀器",
+	"description": "香港圍頭話及客家話文字轉語音",
 	"type": "module",
 	"scripts": {
 		"start": "vite --host",

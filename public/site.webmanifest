@@ -1,6 +1,7 @@
 {
-	"name": "香港本土語言文字轉語音朗讀器",
-	"short_name": "香港本土語言 TTS",
+	"name": "香港圍頭話及客家話文字轉語音",
+	"short_name": "圍頭及客家 TTS",
+	"description": "輸入文字，聆聽圍頭話、客家話發音，傳承本土語言。",
 	"start_url": ".",
 	"lang": "zh-HK",
 	"icons": [
