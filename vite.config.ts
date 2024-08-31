@@ -9,14 +9,10 @@ import tailwindcssNesting from "tailwindcss/nesting";
 import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 import { ViteMinifyPlugin } from "vite-plugin-minify";
 import { VitePWA } from "vite-plugin-pwa";
-import { viteStaticCopy } from "vite-plugin-static-copy";
 
 import type { UserConfig } from "vite";
 
 const dsvParsers: Record<string, ((input: string) => unknown) | undefined> = { ".csv": csvParse, ".tsv": tsvParse };
-
-const isProduction = process.env["NODE_ENV"] === "production";
-const coiServiceWorkerPath = `coi-serviceworker${isProduction ? ".min" : ""}.js`;
 
 export default {
 	base: "./",
@@ -34,21 +30,6 @@ export default {
 		},
 		ViteMinifyPlugin(),
 		ViteImageOptimizer(),
-		// https://stackoverflow.com/a/76185792
-		viteStaticCopy({
-			targets: [
-				{
-					src: `node_modules/coi-serviceworker/${coiServiceWorkerPath}`,
-					dest: ".",
-				},
-			],
-		}),
-		{
-			name: "inject-coi-serviceworker",
-			transformIndexHtml(html) {
-				return html.replace(/(?=\s*<\/body>)/, `${isProduction ? "\n\t\t<script>window.coi = { quiet: true };</script>" : ""}\n\t\t<script src="${coiServiceWorkerPath}"></script>`);
-			},
-		},
 		VitePWA({
 			outDir: "build",
 			registerType: "autoUpdate",
@@ -73,7 +54,6 @@ export default {
 						},
 					},
 				],
-				sourcemap: !isProduction,
 				maximumFileSizeToCacheInBytes: 4194304,
 			},
 		}),
