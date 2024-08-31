@@ -35,12 +35,15 @@ export default function AudioPlayer({
 	currSettingsDialogPage,
 	setCurrSettingsDialogPage,
 }: SentenceComponentState) {
+	// For Screenshot Only
+	const isFirst = syllables[0][0] === "t";
+
 	useEffect(() => void context.resume(), []);
 	const [buffer, setBuffer] = useState<AudioBuffer | undefined>();
 	const [sourceNode, setSourceNode] = useState<AudioBufferSourceNode | undefined>();
 	const [isPlaying, setIsPlaying] = useState<boolean | null>(false);
 	const [startTime, setStartTime] = useState(0);
-	const [progress, setProgress] = useState(0);
+	const [progress, setProgress] = useState(+isFirst * 0.36);
 	const animationId = useRef(0);
 
 	const playAudio = useCallback(() => {
@@ -99,7 +102,7 @@ export default function AudioPlayer({
 				setDownloadError(new DatabaseError(`無法取得${DOWNLOAD_TYPE_LABEL[inferenceMode]}狀態：資料庫出錯`, { cause: error }));
 			}
 		}
-		void getDownloadComponents();
+		// void getDownloadComponents();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [db, language, voice, inferenceMode, voiceSpeed, setDownloadState, currSettingsDialogPage, downloadRetryCounter]);
 
@@ -173,7 +176,7 @@ export default function AudioPlayer({
 		if (isPlaying) setIsPlaying(null);
 		setGenerationError(undefined);
 		setBuffer(undefined);
-		void generateAudio();
+		// void generateAudio();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [language, voice, inferenceMode, voiceSpeed, downloadVersion, text, generationRetryCounter]);
 
@@ -225,7 +228,7 @@ export default function AudioPlayer({
 			onClick={isPlaying === false ? playAudio : pauseAudio}
 			aria-label={isPlaying === false ? "播放" : "暫停"}
 			tabIndex={buffer ? 0 : -1}>
-			{isPlaying === false ? <MdPlayArrow /> : <MdPause />}
+			{!isFirst && isPlaying === false ? <MdPlayArrow /> : <MdPause />}
 		</button>
 		<input
 			type="range"
@@ -250,7 +253,7 @@ export default function AudioPlayer({
 			tabIndex={buffer ? 0 : -1}>
 			<MdStop />
 		</button>
-		{(error || !buffer) && <div className={`absolute inset-0 flex items-center justify-center ${error ? "bg-gray-300 bg-opacity-50 text-error" : "bg-gray-500 bg-opacity-20"} rounded-lg text-xl`}>
+		{error && <div className={`absolute inset-0 flex items-center justify-center ${error ? "bg-gray-300 bg-opacity-50 text-error" : "bg-gray-500 bg-opacity-20"} rounded-lg text-xl`}>
 			{error
 				? <div>
 					<MdErrorOutline size="1.1875em" className="inline align-middle mt-0.5 mr-1" />

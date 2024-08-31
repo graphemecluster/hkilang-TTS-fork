@@ -16,7 +16,12 @@ import type { SettingsDialogPage, Sentence } from "./types";
 export default function App() {
 	const queryOptions = useQueryOptions();
 	const { language, voice, inferenceMode, voiceSpeed, hakkaToneMode, setLanguage, setVoice } = queryOptions;
-	const [sentences, setSentences] = useState<Sentence[]>([]);
+	const [sentences, setSentences] = useState<Sentence[]>([
+		{ language: "waitau", voice: "male", inferenceMode: "online", voiceSpeed: 1, syllables: segment("天地玄黃，宇宙洪荒。") },
+		{ language: "waitau", voice: "female", inferenceMode: "online", voiceSpeed: 1, syllables: segment("日月盈昃，辰宿列張。") },
+		{ language: "hakka", voice: "male", inferenceMode: "online", voiceSpeed: 1, syllables: segment("天地玄黃，宇宙洪荒。") },
+		{ language: "hakka", voice: "female", inferenceMode: "online", voiceSpeed: 1, syllables: segment("日月盈昃，辰宿列張。") },
+	]);
 
 	const textArea = useRef<HTMLTextAreaElement>(null);
 	const btnAddSentence = useRef<HTMLButtonElement>(null);
@@ -35,7 +40,7 @@ export default function App() {
 	}, [textArea, btnAddSentence]);
 
 	const addSentence = useCallback(() => {
-		if (!textArea.current) return;
+		return;
 		setSentences([
 			...textArea.current.value.split("\n").flatMap(text => (text.trim() ? [{ language, voice, inferenceMode, voiceSpeed, syllables: segment(text) }] : [])),
 			...sentences,
@@ -88,7 +93,7 @@ export default function App() {
 						</div>
 					</div>
 					<div>
-						<button type="button" className="btn btn-ghost max-sm:btn-sm max-sm:px-2.5 relative flex-col flex-nowrap gap-0 text-base whitespace-nowrap h-20 min-h-20 text-slate-500 hover:bg-opacity-10" onClick={() => setCurrSettingsDialogPage("settings")}>
+						<button type="button" className="btn btn-ghost max-sm:btn-sm max-sm:px-2.5 relative flex-col flex-nowrap gap-0 text-base whitespace-nowrap h-20 min-h-20 text-slate-500 font-extrabold hover:bg-opacity-10" onClick={() => setCurrSettingsDialogPage("settings")}>
 							{currInferenceModeDownloadState !== "latest" && <MdError size="1.5em" className={`absolute -top-1 -right-1 ${DOWNLOAD_STATUS_INDICATOR_CLASS[currInferenceModeDownloadState]}`} />}
 							<MdSettings size="2em" />
 							設定
@@ -123,14 +128,18 @@ export default function App() {
 				</div>
 			</div>
 			<div className="mt-5">
-				{sentences.map((sentence, i) => (
-					<SentenceCard
-						key={sentences.length - i}
-						sentence={sentence}
-						hakkaToneMode={hakkaToneMode}
-						setDownloadState={setDownloadState}
-						currSettingsDialogPage={currSettingsDialogPage}
-						setCurrSettingsDialogPage={setCurrSettingsDialogPage} />
+				{sentences.flatMap((sentence, i) => (
+					sentence.language === language
+						? [
+							<SentenceCard
+								key={sentences.length - i}
+								sentence={sentence}
+								hakkaToneMode={hakkaToneMode}
+								setDownloadState={setDownloadState}
+								currSettingsDialogPage={currSettingsDialogPage}
+								setCurrSettingsDialogPage={setCurrSettingsDialogPage} />,
+						]
+						: []
 				))}
 			</div>
 		</div>

@@ -50,10 +50,10 @@ const SettingsDialog = forwardRef<HTMLDialogElement, SettingDialogProps>(functio
 					</span>
 				</button>
 			</form>
-			{currSettingsDialogPage && <h3 className="flex items-center gap-2 mx-6 mt-6 mb-4.5">
+			{currSettingsDialogPage && <h3 className="flex items-center gap-2 mx-6 mt-5.5 mb-5">
 				{currSettingsDialogPage === "settings"
 					? <>
-						<MdSettings size="1.125em" />設定
+						<MdSettings size="1.125em" className="mt-1" />設定
 					</>
 					: <>
 						<button type="button" className="btn btn-ghost w-14 h-14 min-h-14 text-4.5xl -ml-3 -mr-2.5 -my-7 text-slate-500 hover:bg-opacity-10" aria-label="返回" onClick={() => setCurrSettingsDialogPage("settings")}>

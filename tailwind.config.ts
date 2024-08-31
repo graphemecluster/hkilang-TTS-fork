@@ -10,7 +10,7 @@ export default {
 		extend: {
 			fontFamily: {
 				serif: [
-					"Chiron Sung HK",
+					// "Chiron Sung HK",
 					"Chiron Sung HK WS",
 					"Times New Roman",
 					"Times",

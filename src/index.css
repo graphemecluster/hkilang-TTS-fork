@@ -38,6 +38,9 @@
 	a {
 		@apply link link-primary no-underline;
 	}
+	b {
+		@apply font-extrabold;
+	}
 	ruby {
 		@apply inline-flex flex-col-reverse items-center gap-0.5 align-bottom;
 	}
