@@ -37,10 +37,6 @@ export default {
 		viteStaticCopy({
 			targets: [
 				{
-					src: "node_modules/onnxruntime-web/dist/*.wasm",
-					dest: ".",
-				},
-				{
 					src: `node_modules/coi-serviceworker/${coiServiceWorkerPath}`,
 					dest: ".",
 				},
